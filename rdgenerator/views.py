@@ -293,9 +293,9 @@ def generator_view(request):
             response = requests.post(url, json=data, headers=headers)
             print(response)
             if response.status_code == 204 or response.status_code == 200:
-                return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"Starting generator...please wait", 'platform':platform})
+                return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"正在生成...请稍候", 'platform':platform})
             else:
-                return JsonResponse({"error": "Something went wrong"})
+                return JsonResponse({"error": "出错了"})
     else:
         form = GenerateForm()
     #return render(request, 'maintenance.html')
@@ -344,7 +344,7 @@ def get_png(request):
 def create_github_run(myuuid):
     new_github_run = GithubRun(
         uuid=myuuid,
-        status="Starting generator...please wait"
+        status="正在生成...请稍候"
     )
     new_github_run.save()
 
@@ -366,7 +366,7 @@ def resize_and_encode_icon(imagefile):
             img = Image.open(image_buffer)
             imgcopy = img.copy()
     except (IOError, OSError):
-        raise ValueError("Uploaded file is not a valid image format.")
+        raise ValueError("上传的文件不是有效的图片格式。")
 
     # Check if resizing is necessary
     if img.size[0] <= maxWidth:
@@ -460,7 +460,7 @@ def save_custom_client(request):
         for chunk in file.chunks():
             f.write(chunk)
 
-    return HttpResponse("File saved successfully!")
+    return HttpResponse("文件保存成功！")
 
 def cleanup_secrets(request):
     # Pass the UUID as a query param or in JSON body
@@ -468,7 +468,7 @@ def cleanup_secrets(request):
     my_uuid = data.get('uuid')
     
     if not my_uuid:
-        return HttpResponse("Missing UUID", status=400)
+        return HttpResponse("缺少 UUID", status=400)
 
     # 1. Find the files in your temp directory matching the UUID
     temp_dir = os.path.join('temp_zips')
@@ -483,7 +483,7 @@ def cleanup_secrets(request):
             except OSError as e:
                 print(f"Error deleting file: {e}")
 
-    return HttpResponse("Cleanup successful", status=200)
+    return HttpResponse("清理成功", status=200)
 
 def get_zip(request):
     filename = request.GET['filename']
