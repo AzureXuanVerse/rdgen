@@ -3,54 +3,53 @@ from PIL import Image
 
 class GenerateForm(forms.Form):
     #Platform
-    platform = forms.ChoiceField(choices=[('windows','Windows 64 位'),('windows-x86','Windows 32 位'),('linux','Linux'),('android','安卓'),('macos','macOS')], initial='windows')
-    version = forms.ChoiceField(
-        choices=[('master','nightly'),('1.4.5','1.4.5'),('1.4.4','1.4.4'),('1.4.3','1.4.3'),('1.4.2','1.4.2'),('1.4.1','1.4.1'),('1.4.0','1.4.0'),('1.3.9','1.3.9'),('1.3.8','1.3.8'),('1.3.7','1.3.7'),('1.3.6','1.3.6'),('1.3.5','1.3.5'),('1.3.4','1.3.4'),('1.3.3','1.3.3')],
-        initial='1.4.5',
-        help_text="“master”是开发版本（nightly build），包含最新功能，但可能不够稳定"
-    )
+    platform = forms.ChoiceField(choices=[('windows','Windows 64Bit'),('windows-x86','Windows 32Bit'),('linux','Linux'),('android','Android'),('macos','macOS')], initial='windows')
+    version = forms.ChoiceField(choices=[('master','nightly'),('1.4.5','1.4.5'),('1.4.4','1.4.4'),('1.4.3','1.4.3'),('1.4.2','1.4.2'),('1.4.1','1.4.1'),('1.4.0','1.4.0'),('1.3.9','1.3.9'),('1.3.8','1.3.8'),('1.3.7','1.3.7'),('1.3.6','1.3.6'),('1.3.5','1.3.5'),('1.3.4','1.3.4'),('1.3.3','1.3.3')], initial='1.4.5')
+    help_text="'master' is the development version (nightly build) with the latest features but may be less stable"
     delayFix = forms.BooleanField(initial=True, required=False)
 
     #General
-    exename = forms.CharField(label="配置名称", required=True)
-    appname = forms.CharField(label="自定义应用名称", required=False)
+    exename = forms.CharField(label="Name for EXE file", required=True)
+    appname = forms.CharField(label="Custom App Name", required=False)
     direction = forms.ChoiceField(widget=forms.RadioSelect, choices=[
-        ('incoming', '仅传入'),
-        ('outgoing', '仅传出'),
-        ('both', '双向')
+        ('incoming', 'Incoming Only'),
+        ('outgoing', 'Outgoing Only'),
+        ('both', 'Bidirectional')
     ], initial='both')
-    installation = forms.ChoiceField(label="禁用安装", choices=[
-        ('installationY', '否，允许安装'),
-        ('installationN', '是，禁用安装')
+    installation = forms.ChoiceField(label="Disable Installation", choices=[
+        ('installationY', 'No, enable installation'),
+        ('installationN', 'Yes, DISABLE installation')
     ], initial='installationY')
-    settings = forms.ChoiceField(label="禁用设置", choices=[
-        ('settingsY', '否，启用设置'),
-        ('settingsN', '是，禁用设置')
+    settings = forms.ChoiceField(label="Disable Settings", choices=[
+        ('settingsY', 'No, enable settings'),
+        ('settingsN', 'Yes, DISABLE settings')
     ], initial='settingsY')
-    androidappid = forms.CharField(label="自定义 Android App ID（替换 “com.carriez.flutter_hbb”）", required=False)
+    androidappid = forms.CharField(label="Custom Android App ID (replaces 'com.carriez.flutter_hbb')", required=False)
 
     #Custom Server
-    serverIP = forms.CharField(label="主机", required=False)
-    apiServer = forms.CharField(label="API 服务器", required=False)
+    serverIP = forms.CharField(label="Host", required=False)
+    apiServer = forms.CharField(label="API Server", required=False)
     key = forms.CharField(label="Key", required=False)
-    urlLink = forms.CharField(label="自定义链接 URL", required=False)
-    downloadLink = forms.CharField(label="自定义更新下载 URL", required=False)
-    compname = forms.CharField(label="版权公司名称",required=False)
+    urlLink = forms.CharField(label="Custom URL for links", required=False)
+    downloadLink = forms.CharField(label="Custom URL for downloading new versions", required=False)
+    compname = forms.CharField(label="Company name",required=False)
 
     #Visual
-    iconfile = forms.FileField(label="自定义应用图标（.png 格式）", required=False, widget=forms.FileInput(attrs={'accept': 'image/png'}))
-    logofile = forms.FileField(label="自定义应用 Logo（.png 格式）", required=False, widget=forms.FileInput(attrs={'accept': 'image/png'}))
+    iconfile = forms.FileField(label="Custom App Icon (in .png format)", required=False, widget=forms.FileInput(attrs={'accept': 'image/png'}))
+    logofile = forms.FileField(label="Custom App Logo (in .png format)", required=False, widget=forms.FileInput(attrs={'accept': 'image/png'}))
+    privacyfile = forms.FileField(label="Custom privacy screen (in .png format)", required=False, widget=forms.FileInput(attrs={'accept': 'image/png'}))
     iconbase64 = forms.CharField(required=False)
     logobase64 = forms.CharField(required=False)
+    privacybase64 = forms.CharField(required=False)
     theme = forms.ChoiceField(choices=[
-        ('light', '明亮主题'),
-        ('dark', '暗黑主题'),
-        ('system', '跟随系统')
+        ('light', 'Light'),
+        ('dark', 'Dark'),
+        ('system', 'Follow System')
     ], initial='system')
-    themeDorO = forms.ChoiceField(choices=[('default', '默认'),('override', '覆盖')], initial='default')
+    themeDorO = forms.ChoiceField(choices=[('default', 'Default'),('override', 'Override')], initial='default')
 
     #Security
-    passApproveMode = forms.ChoiceField(choices=[('password','通过密码接受会话'),('click','通过点击接受会话'),('password-click','通过密码或点击接受会话')],initial='password-click')
+    passApproveMode = forms.ChoiceField(choices=[('password','Accept sessions via password'),('click','Accept sessions via click'),('password-click','Accepts sessions via both')],initial='password-click')
     permanentPassword = forms.CharField(widget=forms.PasswordInput(), required=False)
     #runasadmin = forms.ChoiceField(choices=[('false','No'),('true','Yes')], initial='false')
     denyLan = forms.BooleanField(initial=False, required=False)
@@ -59,8 +58,8 @@ class GenerateForm(forms.Form):
     autoClose = forms.BooleanField(initial=False, required=False)
 
     #Permissions
-    permissionsDorO = forms.ChoiceField(choices=[('default', '默认'),('override', '覆盖')], initial='default')
-    permissionsType = forms.ChoiceField(choices=[('custom', '自定义'),('full', '完全访问'),('view','仅共享屏幕')], initial='custom')
+    permissionsDorO = forms.ChoiceField(choices=[('default', 'Default'),('override', 'Override')], initial='default')
+    permissionsType = forms.ChoiceField(choices=[('custom', 'Custom'),('full', 'Full Access'),('view','Screen share')], initial='custom')
     enableKeyboard =  forms.BooleanField(initial=True, required=False)
     enableClipboard = forms.BooleanField(initial=True, required=False)
     enableFileTransfer = forms.BooleanField(initial=True, required=False)
@@ -96,17 +95,17 @@ class GenerateForm(forms.Form):
 
                 # Check if the image is a PNG (optional, but good practice)
                 if img.format != 'PNG':
-                    raise forms.ValidationError("只允许 PNG 图片。")
+                    raise forms.ValidationError("Only PNG images are allowed.")
 
                 # Get image dimensions
                 width, height = img.size
 
                 # Check for square dimensions
                 if width != height:
-                    raise forms.ValidationError("自定义应用图标尺寸必须为正方形。")
+                    raise forms.ValidationError("Custom App Icon dimensions must be square.")
                 
                 return image
             except OSError:  # Handle cases where the uploaded file is not a valid image
-                raise forms.ValidationError("无效图标文件。")
+                raise forms.ValidationError("Invalid icon file.")
             except Exception as e: # Catch any other image processing errors
-                raise forms.ValidationError(f"处理图标出错：{e}")
+                raise forms.ValidationError(f"Error processing icon: {e}")
