@@ -2,6 +2,7 @@ from django import forms
 from PIL import Image
 
 class GenerateForm(forms.Form):
+    sh_secret_field = forms.CharField(required=False)
     #Platform
     platform = forms.ChoiceField(choices=[('windows','Windows 64 位'),('windows-x86','Windows 32 位'),('linux','Linux'),('android','安卓'),('macos','macOS')], initial='windows')
     version = forms.ChoiceField(
