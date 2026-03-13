@@ -259,9 +259,9 @@ def generator_view(request):
                 "logolink_url":logolink_url,
                 "logolink_uuid":logolink_uuid,
                 "logolink_file":logolink_file,
-                "privacylink_url": privacylink_url,
-                "privacylink_uuid": privacylink_uuid,
-                "privacylink_file": privacylink_file,
+                "privacylink_url":privacylink_url,
+                "privacylink_uuid":privacylink_uuid,
+                "privacylink_file":privacylink_file,
                 "appname":appname,
                 "genurl":_settings.GENURL,
                 "urlLink":urlLink,
@@ -302,40 +302,95 @@ def generator_view(request):
                 "inputs":{
                     "version":version,
                     "zip_url":zip_url
-                }
+                },
+                "return_run_details": True
             } 
             #print(data)
             headers = {
                 'Accept':  'application/vnd.github+json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+_settings.GHBEARER,
-                'X-GitHub-Api-Version': '2022-11-28'
+                'X-GitHub-Api-Version': '2026-03-10'
             }
-            create_github_run(myuuid)
-            response = requests.post(url, json=data, headers=headers)
-            print(response)
-            if response.status_code == 204 or response.status_code == 200:
-                return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"正在生成...请稍候", 'platform':platform})
-            else:
-                return JsonResponse({"error": "出错了"})
+            new_github_run = GithubRun(
+                uuid=myuuid,
+                status="Starting generator...please wait"
+            )
+            try:
+                response = requests.post(url, json=data, headers=headers)
+                #print(response)
+                if response.status_code == 204 or response.status_code == 200:
+                    github_data = response.json()
+                    print(github_data)
+                    new_github_run.github_run_id = github_data.get('workflow_run_id')
+                    new_github_run.status = "in_progress"
+                    new_github_run.save()
+
+                    return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"Starting generator...please wait", 'platform':platform, 'log_url': github_data.get('html_url')})
+                else:
+                    #new_github_run.delete()
+                    return JsonResponse({"error": "GitHub rejected the start request"}, status=500)
+            except Exception as e:
+                #new_github_run.delete()
+                return JsonResponse({"error": f"Connection error: {str(e)}"}, status=500)
     else:
         form = GenerateForm()
     #return render(request, 'maintenance.html')
     return render(request, 'generator.html', {'form': form})
 
 
-def check_for_file(request):
-    filename = request.GET['filename']
-    uuid = request.GET['uuid']
-    platform = request.GET['platform']
-    gh_run = GithubRun.objects.filter(Q(uuid=uuid)).first()
-    status = gh_run.status
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 
-    #if file_exists:
-    if status == "Success":
-        return render(request, 'generated.html', {'filename': filename, 'uuid':uuid, 'platform':platform})
+def check_for_file(request):
+    filename = request.GET.get('filename')
+    uuid = request.GET.get('uuid')
+    platform = request.GET.get('platform')
+    gh_run = get_object_or_404(GithubRun, uuid=uuid)
+    github_log_url = f"https://github.com/{_settings.GHUSER}/{_settings.REPONAME}/actions/runs/{gh_run.github_run_id}"
+
+    if gh_run.status not in ['success', 'failure', 'cancelled', 'timed_out', 'skipped']:
+        headers = {
+            "Authorization": f"Bearer {_settings.GHBEARER}",
+            "Accept": "application/vnd.github+json"
+        }
+        api_url = f"https://api.github.com/repos/{_settings.GHUSER}/{_settings.REPONAME}/actions/runs/{gh_run.github_run_id}"
+        
+        try:
+            gh_response = requests.get(api_url, headers=headers)
+            if gh_response.status_code == 200:
+                gh_data = gh_response.json()
+                
+                if gh_data['status'] == 'completed':
+                    gh_run.status = gh_data['conclusion']
+                    gh_run.save()
+        except Exception as e:
+            print(f"Error checking GitHub: {e}")
+    
+    if gh_run.status == "success":
+        return render(request, 'generated.html', {
+            'filename': filename, 
+            'uuid': uuid, 
+            'platform': platform
+        })
+        
+    elif gh_run.status in ['failure', 'cancelled', 'timed_out', 'skipped', 'action_required']:
+        return render(request, 'failure.html', {
+            'log_url': github_log_url, 
+            'filename': filename, 
+            'uuid': uuid, 
+            'platform': platform,
+            'status': gh_run.status
+        })
+        
     else:
-        return render(request, 'waiting.html', {'filename':filename, 'uuid':uuid, 'status':status, 'platform':platform})
+        return render(request, 'waiting.html', {
+            'filename': filename, 
+            'uuid': uuid, 
+            'status': gh_run.status, 
+            'platform': platform, 
+            'log_url': github_log_url
+        })
 
 def download(request):
     filename = request.GET['filename']
@@ -366,7 +421,7 @@ def get_png(request):
 def create_github_run(myuuid):
     new_github_run = GithubRun(
         uuid=myuuid,
-        status="正在生成...请稍候"
+        status="Starting generator...please wait"
     )
     new_github_run.save()
 
@@ -388,7 +443,7 @@ def resize_and_encode_icon(imagefile):
             img = Image.open(image_buffer)
             imgcopy = img.copy()
     except (IOError, OSError):
-        raise ValueError("上传的文件不是有效的图片格式。")
+        raise ValueError("Uploaded file is not a valid image format.")
 
     # Check if resizing is necessary
     if img.size[0] <= maxWidth:
@@ -441,7 +496,7 @@ def startgh(request):
         'Accept':  'application/vnd.github+json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer '+_settings.GHBEARER,
-        'X-GitHub-Api-Version': '2022-11-28'
+        'X-GitHub-Api-Version': '2026-03-10'
     }
     response = requests.post(url, json=data, headers=headers)
     print(response)
@@ -482,7 +537,7 @@ def save_custom_client(request):
         for chunk in file.chunks():
             f.write(chunk)
 
-    return HttpResponse("文件保存成功！")
+    return HttpResponse("File saved successfully!")
 
 def cleanup_secrets(request):
     # Pass the UUID as a query param or in JSON body
@@ -490,7 +545,7 @@ def cleanup_secrets(request):
     my_uuid = data.get('uuid')
     
     if not my_uuid:
-        return HttpResponse("缺少 UUID", status=400)
+        return HttpResponse("Missing UUID", status=400)
 
     # 1. Find the files in your temp directory matching the UUID
     temp_dir = os.path.join('temp_zips')
@@ -505,7 +560,7 @@ def cleanup_secrets(request):
             except OSError as e:
                 print(f"Error deleting file: {e}")
 
-    return HttpResponse("清理成功", status=200)
+    return HttpResponse("Cleanup successful", status=200)
 
 def get_zip(request):
     filename = request.GET['filename']
