@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title id="pageTitle">构建生成成功</title>
@@ -170,10 +170,8 @@
             };
             const platformNote = document.getElementById('platformNote');
 
-            // Reset all logos
             Object.values(platformLogos).forEach(logo => logo.style.display = 'none');
 
-            // Set appropriate logo and title
             if (platform === 'macos') {
                 document.getElementById('pageTitle').textContent = '已生成 macOS 构建';
                 platformLogos.macos.style.display = 'block';
@@ -197,8 +195,7 @@
             }
         }
 
-        // Call on page load
         updatePlatformUI();
     </script>
 </body>
-</html>{{ ... }}
+</html>

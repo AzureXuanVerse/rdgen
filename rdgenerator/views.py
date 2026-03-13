@@ -314,7 +314,7 @@ def generator_view(request):
             }
             new_github_run = GithubRun(
                 uuid=myuuid,
-                status="Starting generator...please wait"
+                status="正在启动生成器…请稍候"
             )
             try:
                 response = requests.post(url, json=data, headers=headers)
@@ -326,13 +326,13 @@ def generator_view(request):
                     new_github_run.status = "in_progress"
                     new_github_run.save()
 
-                    return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"Starting generator...please wait", 'platform':platform, 'log_url': github_data.get('html_url')})
+                    return render(request, 'waiting.html', {'filename':filename, 'uuid':myuuid, 'status':"正在启动生成器…请稍候", 'platform':platform, 'log_url': github_data.get('html_url')})
                 else:
                     #new_github_run.delete()
-                    return JsonResponse({"error": "GitHub rejected the start request"}, status=500)
+                    return JsonResponse({"error": "GitHub 拒绝启动请求"}, status=500)
             except Exception as e:
                 #new_github_run.delete()
-                return JsonResponse({"error": f"Connection error: {str(e)}"}, status=500)
+                return JsonResponse({"error": f"连接错误：{str(e)}"}, status=500)
     else:
         form = GenerateForm()
     #return render(request, 'maintenance.html')
@@ -421,7 +421,7 @@ def get_png(request):
 def create_github_run(myuuid):
     new_github_run = GithubRun(
         uuid=myuuid,
-        status="Starting generator...please wait"
+        status="正在启动生成器…请稍候"
     )
     new_github_run.save()
 
@@ -443,7 +443,7 @@ def resize_and_encode_icon(imagefile):
             img = Image.open(image_buffer)
             imgcopy = img.copy()
     except (IOError, OSError):
-        raise ValueError("Uploaded file is not a valid image format.")
+        raise ValueError("上传的文件不是有效的图片格式。")
 
     # Check if resizing is necessary
     if img.size[0] <= maxWidth:
@@ -537,7 +537,7 @@ def save_custom_client(request):
         for chunk in file.chunks():
             f.write(chunk)
 
-    return HttpResponse("File saved successfully!")
+    return HttpResponse("文件保存成功！")
 
 def cleanup_secrets(request):
     # Pass the UUID as a query param or in JSON body
@@ -545,7 +545,7 @@ def cleanup_secrets(request):
     my_uuid = data.get('uuid')
     
     if not my_uuid:
-        return HttpResponse("Missing UUID", status=400)
+        return HttpResponse("缺少 UUID", status=400)
 
     # 1. Find the files in your temp directory matching the UUID
     temp_dir = os.path.join('temp_zips')
@@ -560,7 +560,7 @@ def cleanup_secrets(request):
             except OSError as e:
                 print(f"Error deleting file: {e}")
 
-    return HttpResponse("Cleanup successful", status=200)
+    return HttpResponse("清理完成", status=200)
 
 def get_zip(request):
     filename = request.GET['filename']

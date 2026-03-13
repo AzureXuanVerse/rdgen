@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -24,9 +24,9 @@
         }
         .container {
             display: grid;
-            grid-template-columns: 1fr 1fr;  /* Adjust as needed */
+            grid-template-columns: 1fr 1fr;
             grid-gap: 20px;
-            margin: 0 auto;  /* Center the container horizontally */
+            margin: 0 auto;
             padding: 20px;
             max-width: 1200px;
         }
@@ -93,11 +93,11 @@
             color: #2e52f7;
         }
         .text-64 {
-            font-size: 0.5em; 
+            font-size: 0.5em;
             font-weight: bold;
-            bottom: -0.2em; 
+            bottom: -0.2em;
             right: -0.2em;
-            position: absolute; 
+            position: absolute;
             color: white;
             transform: translate(-50%, -50%);
         }
@@ -125,35 +125,35 @@
             max-height: 100px;
             margin-top: 10px;
         }
-        .save-load-section-container { /* New container for fixed positioning */
+        .save-load-section-container {
             position: fixed;
-            top: 20px; /* Adjust as needed */
-            left: 20px; /* Adjust as needed */
-            background-color: #111; /* Match your section background */
+            top: 20px;
+            left: 20px;
+            background-color: #111;
             padding: 0px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 100; /* Ensure it's above other content */
+            z-index: 100;
         }
         .save-load-section {
-            display: none; /* Initially hidden */
+            display: none;
         }
         .error {
             color: red;
         }
         .errorlist {
             color: red;
-            display: flex; /* Enable flexbox for centering */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically (if needed) */
-            list-style: none; /* Remove bullet points if it's a list */
-            padding: 0; /* Remove default padding */
-            margin: 10px auto; /* Center the list itself, add some top/bottom margin */
-            width: fit-content; /* Make the width fit the content */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 10px auto;
+            width: fit-content;
         }
 
         .errorlist li {
-            margin: 5px; /* Add some spacing between list items */
+            margin: 5px;
         }
         @keyframes blink {
             0% { opacity: 1; }
@@ -172,7 +172,7 @@
         }
 
         .password-requirement {
-            display: none; /* Hidden by default */
+            display: none;
             color: orange;
             font-size: 0.9em;
             margin-top: 5px;
@@ -228,8 +228,8 @@
     <form id="myForm" action="/generator" method="post" enctype="multipart/form-data">
         <div class="save-load-section-container">
             <div class="section">
-                <h2 id="saveLoadTitle">保存/加载配置 <i class="fas fa-chevron-down"></i></h2>  
-                <div class="save-load-section">  
+                <h2 id="saveLoadTitle">保存/加载配置 <i class="fas fa-chevron-down"></i></h2>
+                <div class="save-load-section">
                     <button type="button" onclick="saveFormData()">保存配置</button>
                     <input type="file" id="fileInput" style="display:none;" accept=".json">
                     <button type="button" onclick="loadFormData()">加载配置</button>
@@ -262,7 +262,7 @@
                     <option value="windows" selected>Windows 64 位</option>
                     <option value="windows-x86">Windows 32 位</option>
                     <option value="linux">Linux</option>
-                    <option value="android">安卓</option>
+                    <option value="android">Android</option>
                     <option value="macos">macOS</option>
                 </select>
                 <label for="{{ form.version.id_for_label }}">RustDesk 版本：</label>
@@ -274,10 +274,10 @@
                 <label for="{{ form.delayFix.id_for_label }}">{{ form.delayFix }} 使用第三方 API 时修复连接延迟</label>
             </div>
         </div>
-        <div class="container">   
+        <div class="container">
             <div class="section">
                 <h2><i class="fas fa-sliders-h"></i> 常规</h2>
-                    <label for="{{ form.exename.id_for_label }}">配置名称（不含空格或特殊字符，仅允许英文字符）：</label>
+                    <label for="{{ form.exename.id_for_label }}">生成文件名（不含空格或特殊字符，仅允许英文字符）：</label>
                     {{ form.exename }}<span id="filenameError" class="error"></span><br><br>
                     <label for="{{ form.appname.id_for_label }}">自定义应用名称（留空使用默认）：</label>
                     {{ form.appname }}<br><br>
@@ -287,13 +287,13 @@
                     {{ form.installation }}<br><br>
                     <label for="{{ form.settings.id_for_label }}">禁用设置：</label>
                     {{ form.settings }}<br><br>
-                    <label for="{{ form.androidappid.id_for_label }}">自定义 Android App ID（替换 “com.carriez.flutter_hbb”，留空使用默认）：</label>
+                    <label for="{{ form.androidappid.id_for_label }}">自定义 Android App ID（替换“com.carriez.flutter_hbb”，留空使用默认）：</label>
                     {{ form.androidappid }}<br><br>
             </div>
 
             <div class="section">
                 <h2><i class="fas fa-server"></i> 自定义服务器</h2>
-                    <label for="{{ form.serverIP.id_for_label }}">主机：</label>
+                    <label for="{{ form.serverIP.id_for_label }}">ID/中继服务器：</label>
                     {{ form.serverIP }}<br><br>
                     <label for="{{ form.key.id_for_label }}">Key：</label>
                     {{ form.key }}<br><br>
@@ -301,7 +301,7 @@
                     {{ form.apiServer }}<br><br>
                     <label for="{{ form.urlLink.id_for_label }}">自定义链接 URL（替换 https://rustdesk.com）：</label>
                     {{ form.urlLink }}<br><br>
-                    <label for="{{ form.downloadLink.id_for_label }}">自定义更新下载 URL（替换 https://rustdesk.com/download）：</label>
+                    <label for="{{ form.downloadLink.id_for_label }}">自定义下载 URL（替换 https://rustdesk.com/download）：</label>
                     {{ form.downloadLink }}<br><br>
                     <label for="{{ form.compname.id_for_label }}">版权公司名称（替换 Purslane Ltd）：</label>
                     {{ form.compname }}<br><br>
@@ -310,38 +310,35 @@
         <div class="container">
             <div class="section">
                 <h2><i class="fas fa-shield-alt"></i> 安全</h2>
-                    <label for="{{ form.passApproveMode.id_for_label }}">密码确认模式：</label>
+                    <label for="{{ form.passApproveMode.id_for_label }}">连接确认方式：</label>
                     {{ form.passApproveMode }}<br><br>
-                    <div id="passwordRequirement" class="password-requirement">要使用隐藏连接窗口功能，请设置固定密码。</div>
-                    <label for="{{ form.permanentPassword.id_for_label }}">设置固定密码：</label>
+                    <div id="passwordRequirement" class="password-requirement">使用隐藏连接管理器功能前，请设置永久密码。</div>
+                    <label for="{{ form.permanentPassword.id_for_label }}">设置永久密码：</label>
                     {{ form.permanentPassword }} *该密码作为默认值使用，但客户端可修改<br><br>
-                    
-                    
-                    <label for="{{ form.denyLan.id_for_label }}">{{ form.denyLan }} 拒绝局域网发现</label><br>
-                    
-                    <label for="{{ form.enableDirectIP.id_for_label }}">{{ form.enableDirectIP }} 允许 IP 直接访问</label><br>
-                    
-                    <label for="{{ form.autoClose.id_for_label }}">{{ form.autoClose }} 用户无操作时自动关闭传入会话</label><br>
 
-                    <label for="{{ form.hidecm.id_for_label }}">{{ form.hidecm }} 允许从远端屏幕隐藏连接窗口</label><br>
+
+                    <label for="{{ form.denyLan.id_for_label }}">{{ form.denyLan }} 拒绝局域网发现</label><br>
+
+                    <label for="{{ form.enableDirectIP.id_for_label }}">{{ form.enableDirectIP }} 允许 IP 直连</label><br>
+
+                    <label for="{{ form.autoClose.id_for_label }}">{{ form.autoClose }} 用户无操作时自动断开传入会话</label><br>
+
+                    <label for="{{ form.hidecm.id_for_label }}">{{ form.hidecm }} 允许从远端隐藏连接管理器</label><br>
             </div>
-        
+
             <div class="section">
                 <h2><i class="fas fa-paint-brush"></i> 外观</h2>
                     {{ form.iconbase64.as_hidden }}
                     {{ form.logobase64.as_hidden }}
                     {{ form.privacybase64.as_hidden }}
-                    <label for="{{ form.iconfile.id_for_label }}">自定义应用图标（.png 格式）</label>
+                    <label for="{{ form.iconfile.id_for_label }}">自定义应用图标（.png 格式）：</label>
                     {{ form.iconfile }}<br><br>
-                    <!-- <input type="file" name="iconfile" id="iconfile" accept="image/png"> -->
                     <div id="icon-preview"></div><br><br>
-                    <label for="{{ form.logofile.id_for_label }}">自定义应用 Logo（.png 格式）</label>
+                    <label for="{{ form.logofile.id_for_label }}">自定义应用 Logo（.png 格式）：</label>
                     {{ form.logofile }}<br><br>
-                    <!-- <input type="file" name="logofile" id="logofile" accept="image/png"> -->
                     <div id="logo-preview"></div><br><br>
-                    <label for="{{ form.privacyfile.id_for_label }}">自定义隐私屏 (.png 格式)</label>
+                    <label for="{{ form.privacyfile.id_for_label }}">自定义隐私屏（.png 格式）：</label>
                     {{ form.privacyfile }}<br><br>
-                    <!-- <input type="file" name="iconfile" id="iconfile" accept="image/png"> -->
                     <div id="privacy-preview"></div><br><br>
                     <label for="{{ form.theme.id_for_label }}">主题：</label>
                     {{ form.theme }} {{ form.themeDorO }} *“默认”会设置主题但允许客户端更改；“覆盖”会永久设置主题。<br><br>
@@ -362,7 +359,7 @@
                         <label for="{{ form.enableTCP.id_for_label }}">{{ form.enableTCP }} 允许建立 TCP 隧道</label>
                         <label for="{{ form.enableRemoteRestart.id_for_label }}">{{ form.enableRemoteRestart }} 允许远程重启</label>
                         <label for="{{ form.enableRecording.id_for_label }}">{{ form.enableRecording }} 允许录制会话</label>
-                        <label for="{{ form.enableBlockingInput.id_for_label }}">{{ form.enableBlockingInput }} 阻止用户输入</label>
+                        <label for="{{ form.enableBlockingInput.id_for_label }}">{{ form.enableBlockingInput }} 阻止本地输入</label>
                         <label for="{{ form.enableRemoteModi.id_for_label }}">{{ form.enableRemoteModi }} 允许远程修改配置</label>
                         <label for="{{ form.enablePrinter.id_for_label }}">{{ form.enablePrinter }} 允许远程打印机</label>
                         <label for="{{ form.enableCamera.id_for_label }}">{{ form.enableCamera }} 允许远程摄像头</label>
@@ -370,13 +367,13 @@
                     </div><br>
                 <h2><i class="fas fa-code"></i> 代码修改</h2>
                     <label for="{{ form.cycleMonitor.id_for_label }}">{{ form.cycleMonitor }} 在最小化工具栏中添加一个按钮，用于循环切换可用显示器。</label><br>
-                    <label for="{{ form.xOffline.id_for_label }}">{{ form.xOffline }} 在地址簿中为离线设备显示一个 X。</label><br>
+                    <label for="{{ form.xOffline.id_for_label }}">{{ form.xOffline }} 在地址列表中为离线设备显示一个 X。</label><br>
                     <label for="{{ form.removeNewVersionNotif.id_for_label }}">{{ form.removeNewVersionNotif }} 移除新版本通知。</label><br>
             </div>
 
             <div class="section">
                 <h2><i class="fas fa-cog"></i> 其他</h2>
-                    <label for="{{ form.removeWallpaper.id_for_label }}">{{ form.removeWallpaper }} 在传入会话期间移除壁纸</label><br>
+                    <label for="{{ form.removeWallpaper.id_for_label }}">{{ form.removeWallpaper }} 在传入会话中移除壁纸</label><br>
                     <a href="https://rustdesk.com/docs/en/self-host/client-configuration/advanced-settings/">点击此处查看默认/覆盖设置列表</a>
                     <label for="{{ form.defaultManual.id_for_label }}">默认设置</label><br>
                     {{ form.defaultManual }}<br><br>
@@ -390,19 +387,19 @@
             </div>
         </div>
         <div style="text-align: center; margin: 30px 0;">
-            <a href="https://github.com/bryangerlach/rdgen" 
-            target="_blank" 
+            <a href="https://github.com/bryangerlach/rdgen"
+            target="_blank"
             class="sponsor-button">
                 <i class="fab fa-github"></i>
-                Github 上的源代码
+                GitHub 上的源代码
             </a>
         </div>
         <div style="text-align: center; margin: 30px 0;">
             <a href="https://github.com/sponsors/bryangerlach?o=esb"
-            target="_blank" 
+            target="_blank"
             class="sponsor-button">
                 <i class="fab fa-github"></i>
-                捐赠
+                赞助
             </a>
         </div>
     </form>
@@ -520,7 +517,7 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var img = document.createElement('img');
-                    img.src = e.target.result;   
+                    img.src = e.target.result;
                     img.style.maxWidth = '300px';
                     img.style.maxHeight = '60px';
                     document.getElementById(previewContainerId).innerHTML = '';
@@ -554,38 +551,34 @@
             }
 
             const formData = {};
-            const form = document.getElementById("myForm"); // Get the form element
+            const form = document.getElementById("myForm");
 
-            // 1. Use FormData for robust data collection (handles most input types):
-            const formDataObj = new FormData(form);  // Create a FormData object
+            const formDataObj = new FormData(form);
 
             formDataObj.forEach((value, key) => {
-                formData[key] = value; // Add each key/value pair to the formData object.
+                formData[key] = value;
             });
 
-            // 2. Handle select elements separately (more reliable):
             const selectElements = form.querySelectorAll('select');
             selectElements.forEach(select => {
                 formData[select.name] = select.value;
             });
 
-            // 3. Handle checkboxes and radio buttons (important!):
             const checkboxRadioElements = form.querySelectorAll('input[type="checkbox"], input[type="radio"]');
             checkboxRadioElements.forEach(input => {
-                if (input.name) { //only add to form data if it has a name
+                if (input.name) {
                     if (input.checked) {
                         formData[input.name] = input.value;
-                    } else if (!formData.hasOwnProperty(input.name) && input.type === 'checkbox') { //if it's a checkbox and it's not checked, add it as false
+                    } else if (!formData.hasOwnProperty(input.name) && input.type === 'checkbox') {
                         formData[input.name] = false;
                     }
                 }
             });
 
-            // 4. Handle icon and logo
             const iconPreview = document.getElementById('icon-preview');
             if (iconPreview.firstChild && iconPreview.firstChild.src.startsWith('data:image/png;base64')) {
-                formData.iconfile = iconPreview.firstChild.src;  // Use existing base64
-            } else { //if it's a file upload
+                formData.iconfile = iconPreview.firstChild.src;
+            } else {
                 const iconFile = document.getElementById("{{ form.iconfile.id_for_label }}").files[0];
                 if (iconFile) {
                     formData.iconfile = await readFileAsBase64(iconFile);
@@ -594,8 +587,8 @@
 
             const logoPreview = document.getElementById('logo-preview');
             if (logoPreview.firstChild && logoPreview.firstChild.src.startsWith('data:image/png;base64')) {
-                formData.logofile = logoPreview.firstChild.src; // Use existing base64
-            } else { //if it's a file upload
+                formData.logofile = logoPreview.firstChild.src;
+            } else {
                 const logoFile = document.getElementById("{{ form.logofile.id_for_label }}").files[0];
                 if (logoFile) {
                     formData.logofile = await readFileAsBase64(logoFile);
@@ -603,8 +596,8 @@
             }
             const privacyPreview = document.getElementById('privacy-preview');
             if (privacyPreview.firstChild && privacyPreview.firstChild.src.startsWith('data:image/png;base64')) {
-                formData.privacyfile = privacyPreview.firstChild.src; // Use existing base64
-            } else { //if it's a file upload
+                formData.privacyfile = privacyPreview.firstChild.src;
+            } else {
                 const privacyFile = document.getElementById("{{ form.privacyfile.id_for_label }}").files[0];
                 if (privacyFile) {
                     formData.privacyfile = await readFileAsBase64(privacyFile);
@@ -646,16 +639,15 @@
                         try {
                             const formData = JSON.parse(e.target.result);
                             for (const key in formData) {
-                                // More robust selector: checks for name OR id
                                 const elements = document.querySelectorAll(`[name="${key}"], [id="${key}"]`);
 
-                                if (elements.length > 0) { // Check if any element(s) exist
-                                    elements.forEach(element => { // Loop through all matching elements (important for radios)
+                                if (elements.length > 0) {
+                                    elements.forEach(element => {
                                         if (element.type === 'radio') {
-                                            if (element.value === String(formData[key])) { // Compare value, crucial for radios
+                                            if (element.value === String(formData[key])) {
                                                 element.checked = true;
                                             } else {
-                                                element.checked = false; // Uncheck others in the group
+                                                element.checked = false;
                                             }
                                         } else if (element.type === 'checkbox') {
                                             element.checked = formData[key];
@@ -663,7 +655,6 @@
                                             element.value = formData[key];
                                         }
 
-                                        // Handle image previews (as before)
                                         if (key === 'iconfile' && formData[key]) {
                                             document.getElementById('id_iconbase64').value = formData[key];
                                             document.getElementById('icon-preview').innerHTML = `<img src="${formData[key]}" style="max-width: 300px; max-height: 60px;">`;
