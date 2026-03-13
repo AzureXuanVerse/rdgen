@@ -2,3 +2,5 @@
 db.sqlite3
 gunicorn.conf
 .venv
+/.idea
+/参考
